@@ -76,19 +76,19 @@ fi
 
 apt-get install -y matchbox-keyboard
 
-DTBFILE=/boot/bcm2708-rpi-0-w.dtb
+DTBFILE=/boot/bcm2708-rpi-zero-w.dtb
 if [ -f "$DTBFILE" ];then
 	dtc -W no-unit_address_vs_reg -I dtb -O dts -o /boot/tmp.dts $DTBFILE
-
-	if grep -q "brcm,pins = <0x8 0x7>;" /boot/tmp.dts; then
-		if grep -q "brcm,function = <0x1>;" /boot/tmp.dts; then
-      			echo "\nZERO-W";
-			sed /boot/tmp.dts -i -e "s/brcm,function = <0x1>;/brcm,function = <0x6>;/"
-			cp /boot/bcm2708-rpi-0-w.dtb /boot/bcm2708-rpi-0-w.bak	
-			dtc -W no-unit_address_vs_reg -I dts -O dtb -o $DTBFILE /boot/tmp.dts 
+	if grep -q "brcm,pins = < 0x08 0x07 >;" /boot/tmp.dts; then
+		echo "\nFIRST CHECK OK"
+		if grep -q "brcm,function = < 0x01 >;" /boot/tmp.dts; then
+			echo "\nZERO-W";
+				sed /boot/tmp.dts -i -e "s/brcm,function = < 0x01 >;/brcm,function = <0x06>;/"
+				cp /boot/bcm2708-rpi-zero-w.dtb /boot/bcm2708-rpi-zero-w.bak
+			dtc -W no-unit_address_vs_reg -I dts -O dtb -o $DTBFILE /boot/tmp.dts
 		fi
 	fi
-	rm /boot/tmp.dts
+rm /boot/tmp.dts
 fi
 
 
